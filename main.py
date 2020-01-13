@@ -11,13 +11,10 @@ def index():
 
 @app.route('/new_message', methods=['GET', 'POST'])
 def new_message():
-    print(request)
-    print(request.args)
-    print(request.form)
-    print(request.data)
-
+    text = request.form.to_dict().get('Body')
     phone = 'whatsapp:+56979925591'
-    text = 'Texto'
 
     send_message(text, phone)
     return 'Hello world: new_message', 200, {'Content-Type': 'text/plain; charset=utf-8'}
+
+ImmutableMultiDict([('SmsMessageSid', 'SM01c1e50cbd12b64950a26f1d9d1aa308'), ('NumMedia', '0'), ('SmsSid', 'SM01c1e50cbd12b64950a26f1d9d1aa308'), ('SmsStatus', 'received'), ('Body', 'Hola'), ('To', 'whatsapp:+14155238886'), ('NumSegments', '1'), ('MessageSid', 'SM01c1e50cbd12b64950a26f1d9d1aa308'), ('AccountSid', 'AC831650541096db6687934e7a34f68493'), ('From', 'whatsapp:+56979925591'), ('ApiVersion', '2010-04-01')])
