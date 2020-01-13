@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request
 from twilio_client import send_message
 
 app = Flask(__name__)
@@ -7,7 +7,7 @@ app.config['JWT_SECRET_KEY'] = 'el-secreto'
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    return jsonify({'status': True, 'route': 'index'})
+    return 'Hello world: index', 200, {'Content-Type': 'text/plain; charset=utf-8'}
 
 @app.route('/new_message', methods=['GET', 'POST'])
 def new_message():
@@ -20,4 +20,4 @@ def new_message():
     text = 'Texto'
 
     send_message(text, phone)
-    return jsonify({'status': True})
+    return 'Hello world: new_message', 200, {'Content-Type': 'text/plain; charset=utf-8'}
