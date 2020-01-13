@@ -12,6 +12,8 @@ def index():
 @app.route('/new_message', methods=['GET', 'POST'])
 def new_message():
     text = request.form.to_dict().get('Body')
+    if not text:
+    	text = 'Message'
     phone = 'whatsapp:+56979925591'
 
     send_message(text, phone)
