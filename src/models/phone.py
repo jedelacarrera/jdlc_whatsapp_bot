@@ -5,7 +5,7 @@ class Phone(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     number = db.Column(db.String, unique=True, index=True, nullable=False)
     disabled = db.Column(db.Boolean, default=False, nullable=False)
-    offers = db.relationship("Task", backref="phone", lazy=True, cascade="all,delete")
+    tasks = db.relationship("Task", backref="phone", lazy=True, cascade="all,delete")
     # task_id = db.Column(
     #     db.Integer, db.ForeignKey("task.id"), unique=False, nullable=False
     # )
