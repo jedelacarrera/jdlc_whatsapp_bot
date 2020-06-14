@@ -1,7 +1,7 @@
 class Constants:
     @classmethod
     def is_valid(cls, status):
-        if type(status) != str:
+        if not isinstance(status, str):
             return False
         if status == cls.__module__:
             return False

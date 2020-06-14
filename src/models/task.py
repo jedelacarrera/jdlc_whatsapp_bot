@@ -18,7 +18,7 @@ class Task(db.Model):
     def to_dict(self):
         return {
             "id": self.id,
-            "phone": self.phone.number,
+            "phone": self.phone.number,  # pylint: disable=no-member
             "phone_id": self.phone_id,
             "status": self.status,
             "interval": self.interval,
@@ -39,9 +39,11 @@ class Task(db.Model):
     def get_text_to_send(self):
         text = self.text
         if self.status == TaskStatus.PENDING:
-            text += "\n\n```Schedule another message if you want. Send 'help new' for more information```"
+            text += "\n\n```Schedule another message if you want. "
+            text += "Send 'help new' for more information```"
         elif self.status == TaskStatus.REPEAT:
-            text += f"\n\n```This message will be sent again in {self.interval} {self.time_unit.lower()}. "
+            text += "\n\n```This message will be sent again in "
+            text += f"{self.interval} {str(self.time_unit).lower()}. "
             text += f"Send 'delete {self.id}' to stop this.```"
         else:
             raise ValueError(f"{self.status} not valid for sending messages.")
@@ -62,7 +64,7 @@ class Task(db.Model):
             return False
         if not TimeUnit.is_valid(self.time_unit):
             return False
-        if len(text) == 0:
+        if len(self.text) == 0:
             return False
         return True
 

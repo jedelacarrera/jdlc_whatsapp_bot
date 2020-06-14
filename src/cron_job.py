@@ -1,4 +1,4 @@
-from src.models import Task, Phone, db
+from src.models import Task, db
 from src.constants import TaskStatus
 from src.twilio_client import send_message
 
@@ -20,7 +20,7 @@ class CronJob:
             try:
                 send_message(task.get_text_to_send(), task.phone.number)
                 task.update_after_message_sent()
-            except Exception as error:
+            except Exception as error:  # pylint: disable=broad-except
                 print(f"ERROR {str(error)}, with task {str(task.to_dict())}")
                 task.update_after_message_sent(error=True)
             finally:
