@@ -13,7 +13,7 @@ class Task(db.Model):
     time_unit = db.Column(db.String, nullable=False, default=TimeUnit.DAYS)
     edited_at = db.Column(db.DateTime, default=datetime.now)
     created_at = db.Column(db.DateTime, default=datetime.now)
-    text = db.Column(db.String)
+    text = db.Column(db.String, nullable=False)
 
     def to_dict(self):
         return {
@@ -64,7 +64,7 @@ class Task(db.Model):
             return False
         if not TimeUnit.is_valid(self.time_unit):
             return False
-        if len(self.text) == 0:
+        if not self.text:
             return False
         return True
 

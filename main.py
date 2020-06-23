@@ -1,21 +1,22 @@
 import os
 import atexit
 from flask import Flask, request
-from apscheduler.schedulers.background import BackgroundScheduler
+
+# from apscheduler.schedulers.background import BackgroundScheduler
 
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "el-secreto"
 app.config["JWT_SECRET_KEY"] = "el-secreto"
 
-from src.cron_job import cron_function
+# from src.cron_job import cron_function
 
-if not app.debug or os.environ.get("WERKZEUG_RUN_MAIN") == "true":
-    cron = BackgroundScheduler(daemon=True)
-    # Explicitly kick off the background thread
-    cron.add_job(cron_function, trigger="interval", seconds=10)
-    cron.start()
-    atexit.register(lambda: cron.shutdown(wait=False))
+# if not app.debug or os.environ.get("WERKZEUG_RUN_MAIN") == "true":
+#     cron = BackgroundScheduler(daemon=True)
+#     # Explicitly kick off the background thread
+#     cron.add_job(cron_function, trigger="interval", seconds=10)
+#     cron.start()
+#     atexit.register(lambda: cron.shutdown(wait=False))
 
 
 @app.route("/", methods=["GET", "POST"])
