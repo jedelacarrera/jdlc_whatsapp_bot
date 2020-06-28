@@ -1,6 +1,7 @@
 import os
-from datetime import datetime, timedelta
-import main
+
+# from datetime import datetime, timedelta
+# import main
 from src.models import db, Task, Phone
 from src.constants import TaskStatus
 
@@ -22,8 +23,8 @@ def create_phones():
 
 
 def create_tasks(phones):
-    d1 = datetime.now() + timedelta(minutes=10)
-    d2 = datetime.now() + timedelta(hours=1)
+    # d1 = datetime.now() + timedelta(minutes=10)
+    # d2 = datetime.now() + timedelta(hours=1)
     task1 = Task(
         phone=phones[0],
         status=TaskStatus.PENDING,

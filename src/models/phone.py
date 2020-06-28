@@ -1,3 +1,4 @@
+import re
 from src.dbconfig import db
 
 
@@ -6,18 +7,20 @@ class Phone(db.Model):
     number = db.Column(db.String, unique=True, index=True, nullable=False)
     disabled = db.Column(db.Boolean, default=False, nullable=False)
     tasks = db.relationship("Task", backref="phone", lazy=True, cascade="all,delete")
-    # task_id = db.Column(
-    #     db.Integer, db.ForeignKey("task.id"), unique=False, nullable=False
-    # )
-    # description = db.Column(db.Text, unique=False, nullable=True)
-    # date = db.Column(db.DateTime, unique=False, nullable=True)
-    # amount = db.Column(db.BigInteger, unique=False, nullable=True)
 
     def to_dict(self):
         return {
             "id": self.id,
             "number": self.number,
+            "tasks": [task.to_dict() for task in list(self.tasks)],
         }
+
+    def validate(self):
+        if re.match(r"^whatsapp\+[0-9]{11}$", self.number) is None:
+            return False
+        if self.disabled:
+            return False
+        return True
 
     def __repr__(self):
         return "<Phone {}: {}>".format(self.id, self.number)
