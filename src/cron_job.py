@@ -30,3 +30,4 @@ class CronJob:
 def cron_function():
     cron = CronJob()
     cron.run()
+    return cron

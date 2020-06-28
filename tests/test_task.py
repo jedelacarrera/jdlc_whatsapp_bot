@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 from unittest.mock import Mock, patch
 from pytest import mark, raises
 from src.models import Task
@@ -62,8 +63,8 @@ def test_validate(kwargs, valid):
 def test_update_after_message_sent():
     task1 = Task(status=TaskStatus.PENDING)
     task2 = Task(status=TaskStatus.REPEAT)
-    with patch("src.models.task.datetime") as datetime:
-        datetime.now = Mock(return_value=5)
+    with patch("src.models.task.datetime") as datetime_mock:
+        datetime_mock.now = Mock(return_value=5)
         task1.update_after_message_sent()
         task2.update_after_message_sent()
 
@@ -98,3 +99,19 @@ def test_get_text_to_send():
     with raises(ValueError) as error:
         task.get_text_to_send()
     assert "READY not valid for sending messages." in str(error)
+
+
+@mark.parametrize(
+    "status, time_unit, interval, time_lapse, execute",
+    [
+        (TaskStatus.READY, TimeUnit.DAYS, 1, 48 * 3600, False),
+        (TaskStatus.PENDING, TimeUnit.DAYS, 1, 24 * 3600 - 20, True),
+        (TaskStatus.PENDING, TimeUnit.DAYS, 1, 24 * 3600 - 40, False),
+    ],
+)
+def test_should_execute(status, time_unit, interval, time_lapse, execute):
+    edited_at = datetime.now() - timedelta(seconds=time_lapse)
+    task = Task(
+        status=status, time_unit=time_unit, interval=interval, edited_at=edited_at
+    )
+    assert task.should_execute() is execute
