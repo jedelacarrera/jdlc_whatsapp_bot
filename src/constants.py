@@ -22,6 +22,15 @@ class TaskStatus(Constants):
             return False
         raise ValueError(f"{status} is not a valid TaskStatus")
 
+    @classmethod
+    def map_message_to_status(cls, status):
+        status = status.upper()
+        if status == "ONCE":
+            return cls.PENDING
+        if status == "ALWAYS":
+            return cls.REPEAT
+        raise ValueError(f"{status} is not valid. Must be ONCE or ALWAYS")
+
 
 class TimeUnit(Constants):
     MINUTES = "MINUTES"

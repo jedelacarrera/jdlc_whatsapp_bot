@@ -38,6 +38,17 @@ def test_could_execute():
     assert "WRONG is not a valid TaskStatus" in str(error)
 
 
+def test_map_to_status():
+    assert TaskStatus.map_message_to_status("always") == TaskStatus.REPEAT
+    assert TaskStatus.map_message_to_status("Always") == TaskStatus.REPEAT
+    assert TaskStatus.map_message_to_status("ALWAYS") == TaskStatus.REPEAT
+    assert TaskStatus.map_message_to_status("once") == TaskStatus.PENDING
+    assert TaskStatus.map_message_to_status("ONce") == TaskStatus.PENDING
+    with raises(ValueError) as error:
+        TaskStatus.map_message_to_status("other value")
+    assert "OTHER VALUE is not valid. Must be ONCE or ALWAYS" in str(error)
+
+
 def test_get_seconds():
     assert TimeUnit.get_seconds("MINUTES") == 60
     assert TimeUnit.get_seconds("HOURS") == 3600
