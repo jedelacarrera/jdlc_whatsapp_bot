@@ -1,4 +1,4 @@
-from pytest import mark
+from pytest import mark, raises
 from src.models import Phone, Task, db
 from src.constants import TaskStatus, TimeUnit
 
@@ -47,11 +47,24 @@ def test_dict():
     assert phone.id is not None
     assert phone.tasks[0].id is not None
 
-    assert phone.tasks[0].phone_id == phone.id
-    assert phone.tasks[0].phone.id == phone.id
+    assert phone.tasks[0].phone_id == phone.id  # pylint: disable=no-member
     assert phone.tasks[0].edited_at is not None
     assert phone.tasks[0].created_at is not None
 
     db.session.delete(phone.tasks[0])
+    db.session.delete(phone)
+    db.session.commit()
+
+
+def test_get_or_create():
+    with raises(ValueError) as error:
+        Phone.get_or_create_by_number(number="invalid")
+    assert "Phone number (invalid) is not valid" in str(error)
+
+    phone = Phone.get_or_create_by_number(number="whatsapp+56123456789")
+    assert phone.id is not None
+
+    phone2 = Phone.get_or_create_by_number(number="whatsapp+56123456789")
+    assert phone.id == phone2.id
     db.session.delete(phone)
     db.session.commit()
