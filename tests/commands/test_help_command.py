@@ -21,4 +21,4 @@ def test_run():
 
     assert command.number == "whatsapp:+123456789"
     assert command.command == "HELP anything"
-    assert len(command.run()) == 545
+    assert len(command.run()) == 563
