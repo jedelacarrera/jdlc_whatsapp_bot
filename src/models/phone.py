@@ -16,7 +16,7 @@ class Phone(db.Model):
         }
 
     def validate(self):
-        if re.match(r"^whatsapp\+[0-9]{11}$", self.number) is None:
+        if re.match(r"^whatsapp:\+[0-9]{11}$", self.number) is None:
             return False
         if self.disabled:
             return False

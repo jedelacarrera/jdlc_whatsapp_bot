@@ -24,14 +24,14 @@ def test_match_delete_command(message, expected):
     [("delete 10 fdfasd", 10), ("DELETE 1 day", 1), ("DELete 923", 923),],
 )
 def test_parse_delete_command(message, task_id):
-    command = DeleteCommand(message, "whatsapp+123456789")
+    command = DeleteCommand(message, "whatsapp:+123456789")
 
     assert command.task_id == task_id
-    assert command.number == "whatsapp+123456789"
+    assert command.number == "whatsapp:+123456789"
 
 
 def test_run_delete_command():
-    command = NewCommand("once 10 day my text\nspaces\n", "whatsapp+12345678999")
+    command = NewCommand("once 10 day my text\nspaces\n", "whatsapp:+12345678999")
     response = command.run()
     task_id = get_task_id_from_response(response)
 
@@ -39,12 +39,12 @@ def test_run_delete_command():
     assert task.status == "PENDING"
 
     with raises(ValueError) as error:
-        command = DeleteCommand(f"delete {task_id}", "whatsapp+12345678991")
+        command = DeleteCommand(f"delete {task_id}", "whatsapp:+12345678991")
         command.run()
 
     assert f"{task_id} not found" in str(error)
 
-    command = DeleteCommand(f"delete {task_id}", "whatsapp+12345678999")
+    command = DeleteCommand(f"delete {task_id}", "whatsapp:+12345678999")
     response = command.run()
 
     assert response == "Deleted correctly"

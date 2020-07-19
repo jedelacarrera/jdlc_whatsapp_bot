@@ -6,11 +6,11 @@ from src.constants import TaskStatus, TimeUnit
 @mark.parametrize(
     "kwargs, valid",
     [
-        ({"number": "whatsapp+56911111111", "disabled": True}, False),
-        ({"number": "whatsapp+5612345678", "disabled": False}, False),
+        ({"number": "whatsapp:+56911111111", "disabled": True}, False),
+        ({"number": "whatsapp:+5612345678", "disabled": False}, False),
         ({"number": "whatsapp56123456789", "disabled": False}, False),
         ({"number": "hatsapp+56123456789", "disabled": False}, False),
-        ({"number": "whatsapp+56123456789", "disabled": False}, True),
+        ({"number": "whatsapp:+56123456789", "disabled": False}, True),
     ],
 )
 def test_validate(kwargs, valid):
@@ -19,7 +19,7 @@ def test_validate(kwargs, valid):
 
 
 def test_dict():
-    phone = Phone(number="whatsapp+56123456789")
+    phone = Phone(number="whatsapp:+56123456789")
     phone.tasks = [
         Task(
             status=TaskStatus.PENDING, time_unit=TimeUnit.DAYS, interval=5, text="Hola",
@@ -27,11 +27,11 @@ def test_dict():
     ]
     assert phone.to_dict() == {
         "id": None,
-        "number": "whatsapp+56123456789",
+        "number": "whatsapp:+56123456789",
         "tasks": [
             {
                 "id": None,
-                "phone": "whatsapp+56123456789",
+                "phone": "whatsapp:+56123456789",
                 "phone_id": None,
                 "status": "PENDING",
                 "interval": 5,
@@ -61,10 +61,10 @@ def test_get_or_create():
         Phone.get_or_create_by_number(number="invalid")
     assert "Phone number (invalid) is not valid" in str(error)
 
-    phone = Phone.get_or_create_by_number(number="whatsapp+56123456789")
+    phone = Phone.get_or_create_by_number(number="whatsapp:+56123456789")
     assert phone.id is not None
 
-    phone2 = Phone.get_or_create_by_number(number="whatsapp+56123456789")
+    phone2 = Phone.get_or_create_by_number(number="whatsapp:+56123456789")
     assert phone.id == phone2.id
     db.session.delete(phone)
     db.session.commit()
