@@ -10,7 +10,7 @@ def test_run_message_parser():
     assert parser.number == number
     assert parser.command.number == number
     assert isinstance(parser.command, HelpCommand)
-    assert len(parser.run()) == 563
+    assert len(parser.run()) == 506
 
     parser = MessageParser("always 1 hour my text\nspaces\n", number)
     assert isinstance(parser.command, NewCommand)
