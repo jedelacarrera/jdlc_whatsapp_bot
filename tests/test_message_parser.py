@@ -15,8 +15,6 @@ def test_run_message_parser():
     parser = MessageParser("always 1 hour my text\nspaces\n", number)
     assert isinstance(parser.command, NewCommand)
     response = parser.run()
-    print(response)
-    assert "Message scheduled correctly" in response
     task_id = get_task_id_from_response(response)
 
     task = Task.query.get(task_id)

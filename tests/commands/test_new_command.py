@@ -1,7 +1,7 @@
-import re
 from pytest import mark
 from src.commands import NewCommand
 from src.models import Task, db
+from tests.utils import get_task_id_from_response
 
 
 @mark.parametrize(
@@ -43,11 +43,7 @@ def test_parse_command(message, task_status, interval, time_unit, text):
 def test_run_new_command():
     command = NewCommand("once 10 day my text\nspaces\n", "whatsapp+12345678999")
     response = command.run()
-    pattern = '^Message scheduled correctly.\nSend me "delete ([0-9]+)" to remove it.$'
-    match = re.match(pattern, response)
-    assert match is not None
-    task_id = int(match.group(1))
-    assert task_id > 0
+    task_id = get_task_id_from_response(response)
 
     task = Task.query.get(task_id)
     assert task.id == task_id

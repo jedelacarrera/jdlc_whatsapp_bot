@@ -3,7 +3,7 @@
 ## Run tests
 
 ```bash
-python -m pytest tests
+python -m pytest tests --disable-warnings
 ```
 
 ## Run pylint
