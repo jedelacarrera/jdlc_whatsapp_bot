@@ -78,7 +78,7 @@ def test_update_after_message_sent():
 
 def test_get_text_to_send():
     task = Task(status=TaskStatus.PENDING, text="Hi!")
-    expected_text = "Hi!\n\n```Schedule another message if you want. "
+    expected_text = "Hi!\n\n```Schedule another message if you want.\n"
     expected_text += "Send 'help new' for more information```"
     assert task.get_text_to_send() == expected_text
 
@@ -90,7 +90,7 @@ def test_get_text_to_send():
         text="Hi!",
     )
 
-    expected_text = "Hi!\n\n```This message will be sent again in 10 minutes. "
+    expected_text = "Hi!\n\n```This message will be sent again in 10 minute(s).\n"
     expected_text += "Send 'delete 5' to stop this.```"
     assert task.get_text_to_send() == expected_text
 

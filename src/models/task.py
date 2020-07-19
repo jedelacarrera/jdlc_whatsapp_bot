@@ -39,11 +39,11 @@ class Task(db.Model):
     def get_text_to_send(self):
         text = self.text
         if self.status == TaskStatus.PENDING:
-            text += "\n\n```Schedule another message if you want. "
+            text += "\n\n```Schedule another message if you want.\n"
             text += "Send 'help new' for more information```"
         elif self.status == TaskStatus.REPEAT:
             text += "\n\n```This message will be sent again in "
-            text += f"{self.interval} {str(self.time_unit).lower()}. "
+            text += f"{self.interval} {str(self.time_unit).lower()[:-1]}(s).\n"
             text += f"Send 'delete {self.id}' to stop this.```"
         else:
             raise ValueError(f"{self.status} not valid for sending messages.")

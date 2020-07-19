@@ -23,7 +23,7 @@ def test_run(send_message, task_mock):
                 edited_at=datetime.now() - timedelta(days=2),
                 interval=1,
                 time_unit=TimeUnit.DAYS,
-                phone=Phone(number="whatsapp+569123456789"),
+                phone=Phone(number="whatsapp:+569123456789"),
                 text="Execute1",
             ),
         ],
@@ -41,7 +41,7 @@ def test_run(send_message, task_mock):
                 edited_at=datetime.now() - timedelta(days=2),
                 interval=1,
                 time_unit=TimeUnit.DAYS,
-                phone=Phone(number="whatsapp+569987654321"),
+                phone=Phone(number="whatsapp:+569987654321"),
                 text="Execute2",
             ),
         ],
@@ -59,12 +59,12 @@ def test_run(send_message, task_mock):
     assert initial_time < cron.tasks[0].edited_at < final_time
     assert initial_time < cron.tasks[1].edited_at < final_time
     calls = send_message.call_args_list
-    assert calls[0][0][1] == "whatsapp+569123456789"
-    assert calls[1][0][1] == "whatsapp+569987654321"
+    assert calls[0][0][1] == "whatsapp:+569123456789"
+    assert calls[1][0][1] == "whatsapp:+569987654321"
 
-    expected_text1 = "Execute1\n\n```Schedule another message if you want. "
+    expected_text1 = "Execute1\n\n```Schedule another message if you want.\n"
     expected_text1 += "Send 'help new' for more information```"
-    expected_text2 = "Execute2\n\n```This message will be sent again in 1 days. "
+    expected_text2 = "Execute2\n\n```This message will be sent again in 1 day(s).\n"
     expected_text2 += "Send 'delete 6' to stop this.```"
     assert calls[0][0][0] == expected_text1
     assert calls[1][0][0] == expected_text2
@@ -88,7 +88,7 @@ def test_run_error(send_message, task_mock):
                 edited_at=datetime.now() - timedelta(days=2),
                 interval=1,
                 time_unit=TimeUnit.DAYS,
-                phone=Phone(number="whatsapp+569123456789"),
+                phone=Phone(number="whatsapp:+569123456789"),
                 text="Execute1",
             ),
         ],

@@ -5,7 +5,7 @@ from tests.utils import get_task_id_from_response
 
 
 def test_run_message_parser():
-    number = "whatsapp+12345678999"
+    number = "whatsapp:+12345678999"
     parser = MessageParser("help anything", number)
     assert parser.number == number
     assert parser.command.number == number
@@ -20,7 +20,7 @@ def test_run_message_parser():
     task = Task.query.get(task_id)
     assert task.status == "REPEAT"
 
-    parser = MessageParser(f"delete {task_id}", "whatsapp+12345678991")  # wrong number
+    parser = MessageParser(f"delete {task_id}", "whatsapp:+12345678991")  # wrong number
     assert isinstance(parser.command, DeleteCommand)
     assert f"Error: {task_id} not found" == parser.run()
 

@@ -17,8 +17,8 @@ def test_match_delete_command(message, expected):
 
 
 def test_run():
-    command = HelpCommand("HELP anything", "whatsapp+123456789")
+    command = HelpCommand("HELP anything", "whatsapp:+123456789")
 
-    assert command.number == "whatsapp+123456789"
+    assert command.number == "whatsapp:+123456789"
     assert command.command == "HELP anything"
     assert len(command.run()) == 545

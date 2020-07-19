@@ -31,23 +31,23 @@ def test_message_parser(message, expected):
     ],
 )
 def test_parse_command(message, task_status, interval, time_unit, text):
-    command = NewCommand(message, "whatsapp+123456789")
+    command = NewCommand(message, "whatsapp:+123456789")
 
     assert command.task_status == task_status
     assert command.time_unit == time_unit
     assert command.interval == interval
-    assert command.number == "whatsapp+123456789"
+    assert command.number == "whatsapp:+123456789"
     assert command.text == text
 
 
 def test_run_new_command():
-    command = NewCommand("once 10 day my text\nspaces\n", "whatsapp+12345678999")
+    command = NewCommand("once 10 day my text\nspaces\n", "whatsapp:+12345678999")
     response = command.run()
     task_id = get_task_id_from_response(response)
 
     task = Task.query.get(task_id)
     assert task.id == task_id
-    assert task.phone.number == "whatsapp+12345678999"
+    assert task.phone.number == "whatsapp:+12345678999"
     assert task.status == "PENDING"
     assert task.interval == 10
     assert task.time_unit == "DAYS"

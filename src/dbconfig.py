@@ -1,6 +1,6 @@
 import os
 from flask_sqlalchemy import SQLAlchemy
-from main import app
+from app import app
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 

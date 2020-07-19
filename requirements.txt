@@ -1,4 +1,4 @@
-APScheduler==2.1.2
+APScheduler==3.6.3
 black==19.10b0
 Flask==1.0.2
 Flask-SQLAlchemy==2.1.0

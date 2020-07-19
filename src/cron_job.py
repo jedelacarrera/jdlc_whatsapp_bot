@@ -13,7 +13,7 @@ class CronJob:
         self.tasks = list(filter(lambda task: task.should_execute(), tasks))
 
     def run(self):
-        print("Running!")
+        print("Running!", len(self.tasks))
 
         for task in self.tasks:
             print(task.to_dict())
