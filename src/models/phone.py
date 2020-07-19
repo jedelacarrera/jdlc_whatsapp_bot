@@ -22,5 +22,17 @@ class Phone(db.Model):
             return False
         return True
 
+    @classmethod
+    def get_or_create_by_number(cls, number):
+        phone = cls.query.filter_by(number=number).first()
+        if phone:
+            return phone
+        phone = cls(number=number, disabled=False)
+        if phone.validate():
+            db.session.add(phone)
+            db.session.commit()
+            return phone
+        raise ValueError(f"Phone number ({number}) is not valid")
+
     def __repr__(self):
         return "<Phone {}: {}>".format(self.id, self.number)

@@ -11,4 +11,7 @@ class MessageParser:
                 self.command = command_class(message, number)
 
     def run(self):
-        return self.command.run()
+        try:
+            return self.command.run()
+        except Exception as error:  # pylint: disable=broad-except
+            return "Error: " + str(error)

@@ -1,5 +1,7 @@
-from pytest import mark
-from src.commands import DeleteCommand
+from pytest import mark, raises
+from src.commands import DeleteCommand, NewCommand
+from src.models import Task, db
+from tests.utils import get_task_id_from_response
 
 
 @mark.parametrize(
@@ -26,3 +28,29 @@ def test_parse_delete_command(message, task_id):
 
     assert command.task_id == task_id
     assert command.number == "whatsapp+123456789"
+
+
+def test_run_delete_command():
+    command = NewCommand("once 10 day my text\nspaces\n", "whatsapp+12345678999")
+    response = command.run()
+    task_id = get_task_id_from_response(response)
+
+    task = Task.query.get(task_id)
+    assert task.status == "PENDING"
+
+    with raises(ValueError) as error:
+        command = DeleteCommand(f"delete {task_id}", "whatsapp+12345678991")
+        command.run()
+
+    assert f"{task_id} not found" in str(error)
+
+    command = DeleteCommand(f"delete {task_id}", "whatsapp+12345678999")
+    response = command.run()
+
+    assert response == "Deleted correctly"
+
+    task = Task.query.get(task_id)
+    assert task.status == "READY"
+
+    db.session.delete(task)
+    db.session.commit()
