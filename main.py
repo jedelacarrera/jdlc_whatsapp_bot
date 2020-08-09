@@ -9,11 +9,17 @@ from src.message_parser import MessageParser  # pylint: disable=wrong-import-pos
 
 
 if not app.debug or os.environ.get("WERKZEUG_RUN_MAIN") == "true":
-    cron = BackgroundScheduler(daemon=True)
-    # Explicitly kick off the background thread
-    cron.add_job(cron_function, trigger="interval", seconds=60)
-    cron.start()
-    atexit.register(lambda: cron.shutdown(wait=False))
+    if os.getenv("FLASK_ENV") == "development":
+        cron = BackgroundScheduler(daemon=True)
+        # Explicitly kick off the background thread
+        cron.add_job(cron_function, trigger="interval", seconds=60)
+        cron.start()
+        atexit.register(lambda: cron.shutdown(wait=False))
+
+
+@app.route("/cron_job", methods=["POST"])
+def cron_job_trigger():
+    cron_function()
 
 
 @app.route("/", methods=["GET", "POST"])
