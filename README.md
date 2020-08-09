@@ -16,3 +16,4 @@ python -m pylint src tests
 
 - Send a message through whatsapp to `+14155238886` with the text `join where-dear`
 - Then send `help` to receive more instructions.
+- You can schedule messages here!
