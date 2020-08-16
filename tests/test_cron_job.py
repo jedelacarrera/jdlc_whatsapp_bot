@@ -7,7 +7,8 @@ from src.cron_job import CronJob
 
 @patch("src.cron_job.Task")
 @patch("src.cron_job.TwilioClient")
-def test_run(twilio_client, task_mock):
+@patch("src.cron_job.db")
+def test_run(_db, twilio_client, task_mock):
     task_mock.query.filter_by().all.side_effect = [
         [
             Task(status=TaskStatus.ERROR),  # Do not execute
@@ -72,7 +73,8 @@ def test_run(twilio_client, task_mock):
 
 @patch("src.cron_job.Task")
 @patch("src.cron_job.TwilioClient")
-def test_run_error(twilio_client, task_mock):
+@patch("src.cron_job.db")
+def test_run_error(_db, twilio_client, task_mock):
     task_mock.query.filter_by().all.side_effect = [
         [
             Task(status=TaskStatus.ERROR),  # Do not execute
