@@ -1,15 +1,18 @@
 import os
 import atexit
 from flask import request
-from apscheduler.schedulers.background import BackgroundScheduler
 
 from app import app
-from src.cron_job import cron_function  # pylint: disable=wrong-import-position
-from src.message_parser import MessageParser  # pylint: disable=wrong-import-position
+from src.cron_job import cron_function
+from src.message_parser import MessageParser
 
 
 if not app.debug or os.environ.get("WERKZEUG_RUN_MAIN") == "true":
     if os.getenv("FLASK_ENV") == "development":
+        from apscheduler.schedulers.background import (
+            BackgroundScheduler,
+        )  # pylint: disable=wrong-import-position
+
         cron = BackgroundScheduler(daemon=True)
         # Explicitly kick off the background thread
         cron.add_job(cron_function, trigger="interval", seconds=60)
