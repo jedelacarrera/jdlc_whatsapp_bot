@@ -6,8 +6,8 @@ from src.cron_job import CronJob
 
 
 @patch("src.cron_job.Task")
-@patch("src.cron_job.send_message")
-def test_run(send_message, task_mock):
+@patch("src.cron_job.TwilioClient")
+def test_run(twilio_client, task_mock):
     task_mock.query.filter_by().all.side_effect = [
         [
             Task(status=TaskStatus.ERROR),  # Do not execute
@@ -53,12 +53,12 @@ def test_run(send_message, task_mock):
 
     assert task_mock.query.filter_by().all.call_count == 2
     assert len(cron.tasks) == 2
-    assert send_message.call_count == 2
+    assert twilio_client().send_message.call_count == 2
     assert cron.tasks[0].status == TaskStatus.READY
     assert cron.tasks[1].status == TaskStatus.REPEAT
     assert initial_time < cron.tasks[0].edited_at < final_time
     assert initial_time < cron.tasks[1].edited_at < final_time
-    calls = send_message.call_args_list
+    calls = twilio_client().send_message.call_args_list
     assert calls[0][0][1] == "whatsapp:+569123456789"
     assert calls[1][0][1] == "whatsapp:+569987654321"
 
@@ -71,8 +71,8 @@ def test_run(send_message, task_mock):
 
 
 @patch("src.cron_job.Task")
-@patch("src.cron_job.send_message")
-def test_run_error(send_message, task_mock):
+@patch("src.cron_job.TwilioClient")
+def test_run_error(twilio_client, task_mock):
     task_mock.query.filter_by().all.side_effect = [
         [
             Task(status=TaskStatus.ERROR),  # Do not execute
@@ -98,7 +98,7 @@ def test_run_error(send_message, task_mock):
     def raise_function(*_args):
         raise Exception("My error")
 
-    send_message.side_effect = raise_function
+    twilio_client().send_message.side_effect = raise_function
     cron = CronJob()
     initial_time = datetime.now()
     cron.run()
