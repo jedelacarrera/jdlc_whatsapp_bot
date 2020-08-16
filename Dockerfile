@@ -6,7 +6,10 @@ FROM python:3.7-slim
 ENV APP_HOME /app
 WORKDIR $APP_HOME
 
-COPY . ./
+COPY main.py ./
+COPY app.py ./
+COPY requirements.txt ./
+COPY src ./src
 # Install production dependencies.
 RUN pip install -r requirements.txt
 
