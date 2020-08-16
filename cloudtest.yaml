@@ -11,7 +11,7 @@ steps:
   - id: venv
     name: gcr.io/$PROJECT_ID/python-cloudbuild
     waitFor:
-      - "-"
+      - "python-builder"
     entrypoint: /bin/bash
     args:
       - "-c"
