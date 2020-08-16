@@ -1,4 +1,13 @@
 steps:
+  - id: python-builder
+    name: gcr.io/cloud-builders/gcloud
+    waitFor:
+      - "-"
+    args:
+      - builds
+      - submit
+      - python-cloud-builder
+      - "--config=python-cloud-builder/cloudbuild.yaml"
   - id: venv
     name: gcr.io/$PROJECT_ID/python-cloudbuild
     waitFor:
