@@ -20,6 +20,7 @@ if not app.debug or os.environ.get("WERKZEUG_RUN_MAIN") == "true":
 @app.route("/cron_job", methods=["POST"])
 def cron_job_trigger():
     cron_function()
+    return "Cron job run succesfully", 200
 
 
 @app.route("/", methods=["GET", "POST"])
