@@ -1,3 +1,4 @@
+import os
 from pytest import mark, raises
 from src.commands import DeleteCommand, NewCommand
 from src.models import Task, db
@@ -31,6 +32,9 @@ def test_parse_delete_command(message, task_id):
 
 
 def test_run_delete_command():
+    if os.getenv("SKIP_DB_TESTS") != "false":
+        return
+
     command = NewCommand("once 10 day my text\nspaces\n", "whatsapp:+12345678999")
     response = command.run()
     task_id = get_task_id_from_response(response)

@@ -1,6 +1,6 @@
 from src.models import Task, db
 from src.constants import TaskStatus
-from src.twilio_client import send_message
+from src.twilio_client import TwilioClient
 
 
 class CronJob:
@@ -11,6 +11,7 @@ class CronJob:
         tasks = pending_tasks + repeatable_tasks
 
         self.tasks = list(filter(lambda task: task.should_execute(), tasks))
+        self.twilio_client = TwilioClient()
 
     def run(self):
         print("Running!", len(self.tasks))
@@ -18,7 +19,9 @@ class CronJob:
         for task in self.tasks:
             print(task.to_dict())
             try:
-                send_message(task.get_text_to_send(), task.phone.number)
+                self.twilio_client.send_message(
+                    task.get_text_to_send(), task.phone.number
+                )
                 task.update_after_message_sent()
             except Exception as error:  # pylint: disable=broad-except
                 print(f"ERROR {str(error)}, with task {str(task.to_dict())}")

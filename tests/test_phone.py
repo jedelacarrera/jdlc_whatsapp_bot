@@ -1,3 +1,4 @@
+import os
 from pytest import mark, raises
 from src.models import Phone, Task, db
 from src.constants import TaskStatus, TimeUnit
@@ -42,6 +43,9 @@ def test_dict():
             }
         ],
     }
+    if os.getenv("SKIP_DB_TESTS") != "false":
+        return
+
     db.session.add(phone)
     db.session.commit()
     assert phone.id is not None
@@ -57,8 +61,12 @@ def test_dict():
 
 
 def test_get_or_create():
+    if os.getenv("SKIP_DB_TESTS") != "false":
+        return
+
     with raises(ValueError) as error:
         Phone.get_or_create_by_number(number="invalid")
+
     assert "Phone number (invalid) is not valid" in str(error)
 
     phone = Phone.get_or_create_by_number(number="whatsapp:+56123456789")
