@@ -1,5 +1,4 @@
 import os
-from unittest.mock import patch
 from src.models import db, Task
 from src.message_parser import MessageParser
 from src.commands import NewCommand, DeleteCommand, HelpCommand
@@ -58,5 +57,5 @@ def test_message_parser_no_db():
     parser = MessageParser("always 1 hour my text\nspaces\n", number)
     assert isinstance(parser.command, NewCommand)
 
-    parser = MessageParser(f"delete 5", "whatsapp:+12345678991")  # wrong number
+    parser = MessageParser("delete 5", "whatsapp:+12345678991")  # wrong number
     assert isinstance(parser.command, DeleteCommand)
